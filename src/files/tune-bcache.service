@@ -1,0 +1,10 @@
+[Unit]
+Description=Tuning of bcache device settings
+After=systemd-udev-settle.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/tune-bcache
+
+[Install]
+WantedBy=multi-user.target
