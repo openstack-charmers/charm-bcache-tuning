@@ -15,19 +15,28 @@
 
 import shutil
 import subprocess
+import os
 
-from charms.reactive import when, when_not, set_flaga
+from charms.reactive import when, when_not, set_flag
+
+from charmhelpers.core.hookenv import status_set
 
 
 @when_not('bcache-tuning.installed')
 def install_bcache_tuning():
     shutil.copyfile('files/tune-bcache',
-                    '/usr/local/bin')
-    shutil.copyfile('files/tune-bcache.service'.
-                    '/lib/systemd/system')
+                    '/usr/local/bin/tune-bcache')
+    os.chmod('/usr/local/bin/tune-bcache', 0o755)
+    shutil.copyfile('files/tune-bcache.service',
+                    '/lib/systemd/system/tune-bcache.service')
     subprocess.check_call(['systemctl', 'daemon-reload'])
     subprocess.check_call(['systemctl', 'enable',
                            'tune-bcache.service'])
     subprocess.check_call(['systemctl', 'start',
                            'tune-bcache.service'])
     set_flag('bcache-tuning.installed')
+
+
+@when('bcache-tuning.installed')
+def assess_status():
+    status_set('active', 'bcache devices tuned')
