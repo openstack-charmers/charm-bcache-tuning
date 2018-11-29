@@ -12,7 +12,7 @@ CACHE_DEVICE_GLOB = '/sys/fs/bcache/*/{}'
 
 BCACHE_TUNING = {
   'sequential_cutoff': '0',
-  'writeback_percent': '30',
+  'writeback_percent': '10',
 }
 
 BCACHE_DEVICE_GLOB = '/sys/block/bcache*/bcache/{}'
